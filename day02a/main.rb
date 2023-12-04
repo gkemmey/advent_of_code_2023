@@ -2,8 +2,8 @@ Result = Struct.new(:red, :green, :blue, keyword_init: true)
 
 Revelation = Struct.new(:red, :green, :blue, keyword_init: true) do
   def possible?(result)
-    (red.nil? || red <= result.red) && 
-      (green.nil? || green <= result.green) && 
+    (red.nil? || red <= result.red) &&
+      (green.nil? || green <= result.green) &&
       (blue.nil? || blue <= result.blue)
   end
 end
@@ -15,7 +15,7 @@ Game = Struct.new(:id, :revelations) do
 end
 
 def parse_revelations(string)
-  string.split("; ").map { |part| 
+  string.split("; ").map { |part|
     Revelation.new(**(part.scan(/(\d+) (red|blue|green)/).map { |(n, color)| [color, n.to_i] }.to_h))
   }
 end

@@ -14,7 +14,7 @@ Game = Struct.new(:id, :revelations) do
 end
 
 def parse_revelations(string)
-  string.split("; ").map { |part| 
+  string.split("; ").map { |part|
     Revelation.new(**(part.scan(/(\d+) (red|blue|green)/).map { |(n, color)| [color, n.to_i] }.to_h))
   }
 end
