@@ -1,0 +1,72 @@
+. ? ? . . ? ? . . . ? # # . [1, 1, 3]
+
+@ each 2, could i consume the first group
+. ?
+    no
+? ?
+    yes(# .)
+        . # . | . . ? ? . . . ? # # . [1, 3]
+        @ for each 2 past the |, can i consume the first group
+        . .
+            no
+        . ?
+            no
+        ? ?
+            yes(# .)
+                . . # . | . . . ? # # . [3]
+                @ for each 4 past the |, can i consume the first group
+                . . . ?
+                    no
+                . . ? #
+                    no
+                . ? # #
+                    no (because last group needs to be followed by a dot or end of string)
+                ? # # .
+                    yes ✅
+        ? .
+            yes(# .)
+                . . . # . | . . ? # # . [3]
+                # for each 4 past the |, can i consume the first group
+                . . ? #
+                    no
+                . ? # #
+                    no (because last group needs to be followed by a dot or end of string)
+                ? # # .
+                    yes ✅
+        . .
+            no
+        . ?
+            no
+        ? #
+            no
+        # #
+            no
+        # .
+            yes
+                . . . . . . . . # # . [3] ❌
+? .
+    yes(# .)
+        . . # . | . ? ? . . . ? # # . [1, 3]
+. .
+    no
+. ?
+    no
+? ?
+    yes(# .)
+        . . . . . # . . . . ? # # . [1, 3] ❌
+? .
+    yes(# .)
+        . . . . . . # . . . ? # # . [1, 3] ❌
+. .
+    no
+. .
+    no
+. ?
+    no
+? #
+    no
+# #
+    no
+# .
+    yes(# .)
+        . . . . . . . . . . . # # . [1, 3] ❌
