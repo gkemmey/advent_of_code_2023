@@ -1,4 +1,4 @@
-def possibilities(springs, groups_of_damaged, start = 0, mid_group = false, level = 0)
+def solve(springs, groups_of_damaged, start = 0, mid_group = false, level = 0)
   springs = springs.dup
   groups_of_damaged = groups_of_damaged.dup
 
@@ -21,10 +21,10 @@ def possibilities(springs, groups_of_damaged, start = 0, mid_group = false, leve
         count = 0
 
         springs[i] = "#"
-        count += possibilities(springs, groups_of_damaged, i, mid_group, level + 1)
+        count += solve(springs, groups_of_damaged, i, mid_group, level + 1)
 
         springs[i] = "."
-        count += possibilities(springs, groups_of_damaged, i, mid_group, level + 1)
+        count += solve(springs, groups_of_damaged, i, mid_group, level + 1)
 
         return count
 
@@ -34,6 +34,14 @@ def possibilities(springs, groups_of_damaged, start = 0, mid_group = false, leve
   end
 
   groups_of_damaged.empty? || groups_of_damaged == [0] ? 1 : 0
+end
+
+def possibilities(springs, groups_of_damaged)
+  squish(springs).split(".").collect { |part|
+    groups_of_damaged.sum { |group|
+      solve(part.chars, [group]).tap { puts("part=#{part}, group=#{group} -- got #{_1}") }
+    }
+  }.inject(:*)
 end
 
 # -------- parsing --------
@@ -49,36 +57,21 @@ def parse_readings(input)
   }
 end
 
-def unfold(springs, groups_of_damaged)
-  return [
-    ([springs.join] * 5).join("?").chars,
-    groups_of_damaged * 5
-  ]
+def squish(springs)
+  springs.join.gsub(/^\.+/, '').gsub(/\.+$/, '').gsub(/\.+/, '.')
 end
 
-# -------- main --------
-
-example = DATA.read
-fail unless [1, 4, 1, 1, 4, 10] ==
-              parse_readings(example).
-                collect { |springs, groups_of_damaged|
-                  possibilities(springs, groups_of_damaged)
-                }
-
-fail unless [1, 16384, 1, 16, 2500, 506250] ==
-              parse_readings(example).
-                map { |springs, groups_of_damaged|
-                  unfold(springs, groups_of_damaged)
-                }.tap { |all| binding.irb }.
-                collect { |springs, groups_of_damaged|
-                  possibilities(springs, groups_of_damaged)
-                }
+fail unless [1, 4, 1, 1, 4, 10] == parse_readings(DATA.read).
+                                     collect { |springs, groups_of_damaged|
+                                       possibilities(springs, groups_of_damaged)
+                                     }.tap { pp _1 }
 
 fail unless 7307 == parse_readings(File.read("./input.txt")).
                       collect { |springs, groups_of_damaged|
                         possibilities(springs, groups_of_damaged)
                       }.
-                      sum
+                      sum.
+                      tap { |answer| puts(answer) }
 
 __END__
 ???.### 1,1,3
